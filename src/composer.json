@@ -1,0 +1,17 @@
+{
+    "name": "karasik/project-name",
+    "autoload": {
+        "psr-4": {
+            "Karasik\\ProjectName\\": "./"
+        }
+    },
+    "authors": [
+        {
+            "name": "Vadim Karasik",
+            "email": "vadkarasik@gmail.com"
+        }
+    ],
+    "require": {
+        "kint-php/kint": "^5.1"
+    }
+}

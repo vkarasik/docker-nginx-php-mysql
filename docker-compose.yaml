@@ -1,0 +1,58 @@
+name: ${PROJECT_NAME}
+
+services:
+  nginx:
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    container_name: nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - php
+      - mysql
+    env_file:
+      - .env
+  php:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+      args:
+        PHP_VERSION: ${PHP_VERSION}
+        XDEBUG_VERSION: ${XDEBUG_VERSION}
+    container_name: php
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - mysql
+    env_file:
+      - .env
+  mysql:
+    build:
+      context: ./docker/mysql
+      dockerfile: Dockerfile
+      args:
+        MYSQL_VERSION: ${MYSQL_VERSION}
+    restart: always
+    container_name: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - ./docker/mysql/dbdata:/var/lib/mysql
+      - ./docker/mysql/initdb:/docker-entrypoint-initdb.d
+    env_file:
+      - .env
+  phpmyadmin:
+    build:
+      context: ./docker/phpmyadmin
+      dockerfile: Dockerfile
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    depends_on:
+      - mysql
+    env_file:
+      - .env
